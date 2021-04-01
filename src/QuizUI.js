@@ -88,7 +88,7 @@ const QuizUI = (props) => {
         <Grid container direction={'column'} spacing={0} alignItems="center">
             <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6">Bible quiz</Typography>
+                    <Typography variant="h6">Bible quiz-Test</Typography>
                 </Toolbar>
             </AppBar>
             <Grid item>
