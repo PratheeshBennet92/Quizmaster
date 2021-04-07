@@ -24,14 +24,11 @@ const AlertDialogSlide = (props) =>{
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Slide in alert dialog
-      </Button>
       <Dialog
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        onClose={props.onCancel}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
