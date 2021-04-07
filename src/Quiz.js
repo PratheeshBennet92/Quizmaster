@@ -4,6 +4,8 @@ import QuizUI from './QuizUI'
 import { fetchQuiz, quizItemsFetchDataSuccess } from './QuizAction'
 import {connect} from 'react-redux'
 import CircularSpinner from './CircularSpinner'
+import AlertDialogSlide from './AlertDialogSlide'
+import { render } from '@testing-library/react'
 const Quiz = (props) => {
     const paperStyle = { padding: 20, height: '70h', width: '75%', margin: "20px auto", align: "center" }
     const [currentQuestion, setCurrentQuestion] = useState(null)
@@ -11,7 +13,7 @@ const Quiz = (props) => {
     const [isFirstQuestion, setIsFirstQuestion] = useState(false)
     const [isLastQuestion, setIsLastQuestion] = useState(false)
     const [isReview, setIsReview] = useState(false)
-
+    const [showConfirmAlert, setShowConfirmAlert] = useState(false)
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
     const [response, setResponse] = useState([])
@@ -34,12 +36,14 @@ const Quiz = (props) => {
     useEffect(() => {
         debugger;
         props.fetchQuestion()
+        console.log("Show confirm alert", showConfirmAlert)
     }, [])
     useEffect(() => {
         if (currentQuestion != null) {
             flagFirstQuestion()
             flagLastQuestion()
         }
+        console.log("Show confirm alert", showConfirmAlert)
     });
     const nextTapped = (index) => {
         debugger;
@@ -62,7 +66,8 @@ const Quiz = (props) => {
             let newOrder = currentQuestion.order + 1
             console.log("increment oreder", newOrder)
             if (newOrder == questions.length) {
-                setIsReviewBool()
+                showConfirmSubmit()
+                //setIsReviewBool()
             } else {
                 let newQues = questions[newOrder]
                 console.log("next ques", newQues)
@@ -111,6 +116,19 @@ const Quiz = (props) => {
     const skipTapped = () => {
 
     };
+    const showConfirmSubmit = () => {
+        setShowConfirmAlert(true)
+    }
+    const confirmSubmit = () => {
+        removeConfirmAlert()
+        setIsReviewBool()
+    }
+    const cancelSubmit = () => {
+        removeConfirmAlert()
+    }
+    const removeConfirmAlert = () => {
+        setShowConfirmAlert(false)
+    }
     return (
         <Paper elevation={10} style={paperStyle}>
             {props.loading ? <CircularSpinner/> : null}
@@ -126,10 +144,14 @@ const Quiz = (props) => {
                     isReview={isReview}
                     score={score}
                     totalQuestion={questions}
+                    showAlert = {showConfirmAlert}
                     updateSelectedIndex={updateSelectedIndex}
                 />
                 : null}
-
+                {showConfirmAlert ?  <AlertDialogSlide
+                onSubmit = {confirmSubmit}
+                onCancel = {cancelSubmit}
+                />: null}
         </Paper>
     )
 }
